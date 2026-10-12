@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071128">
+  <meta name="description" content="Actuarial Engineering — Parallel Futures Initiative. AI, stochastic risk and the mathematics of time.">
+  <meta property="og:title" content="Actuarial Engineering — Parallel Futures Initiative">
+  <meta property="og:description" content="An open interdisciplinary research initiative exploring AI-augmented actuarial modelling, parallel futures, and the mathematics of time.">
+  <meta property="og:type" content="website">
+  <title>Actuarial Engineering — Parallel Futures Initiative</title>
+  <style>
+    :root{
+      color-scheme:dark;
+      --bg:#050b1d;
+      --bg-2:#08132b;
+      --panel:rgba(13,24,49,.68);
+      --panel-2:rgba(23,37,71,.66);
+      --line:rgba(118,176,255,.14);
+      --text:#eef6ff;
+      --muted:#aab9d2;
+      --soft:#8ea2c4;
+      --blue:#3b82ff;
+      --blue-2:#5aa9ff;
+      --teal:#36d8d0;
+      --teal-2:#87fff4;
+      --slate:#1e293b;
+      --shadow:0 28px 80px rgba(0,0,0,.38);
+      --radius:26px;
+      --max:1240px;
+    }
+    *,:before,:after{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:110px}
+    body{
+      margin:0;
+      font:15px/1.72 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      letter-spacing:.023em;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(54,216,208,.12), transparent 22%),
+        radial-gradient(circle at 80% 15%, rgba(59,130,255,.16), transparent 26%),
+        radial-gradient(circle at 50% 75%, rgba(0,185,255,.08), transparent 26%),
+        linear-gradient(180deg,#071128 0%, #050b1d 42%, #071024 100%);
+      -webkit-font-smoothing:antialiased;
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(rgba(150,205,255,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(150,205,255,.045) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(circle at center, rgba(0,0,0,.9), rgba(0,0,0,.35));
+      opacity:.35;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    button,input{font:inherit}
+    button{cursor:pointer}
+    :focus-visible{outline:3px solid var(--teal-2);outline-offset:3px}
+    ::selection{background:rgba(59,130,255,.35);color:#fff}
+
+    .container{width:min(var(--max), calc(100% - 44px));margin:0 auto}
+    .section{padding:78px 0;position:relative}
+    .section + .section{border-top:1px solid var(--line)}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:10px;
+      color:var(--teal-2);font-size:.78rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+    }
+    .eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--blue-2));box-shadow:0 0 18px rgba(54,216,208,.55)}
+    .section-head{max-width:880px;margin-bottom:30px}
+    .section-head h2{margin:14px 0 14px;font-size:clamp(1.8rem,3.25vw,3rem);line-height:1.15;letter-spacing:.006em}
+    .section-head p{margin:0;color:var(--muted);font-size:.99rem}
+
+    .site-shell{padding:0;position:sticky;top:0;z-index:40;backdrop-filter: blur(12px)}
+    .site-header{
+      width:100%;margin:0;
+      border-top:0;border-left:0;border-right:0;border-bottom:1px solid rgba(111,159,255,.16);
+      background:linear-gradient(180deg, rgba(10,20,42,.92), rgba(9,18,38,.86));
+      border-radius:0;
+      box-shadow:0 12px 30px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .nav-wrap{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:10px 22px;max-width:1240px;margin:0 auto}
+    .brand{display:flex;align-items:center;gap:14px;min-width:0}
+    .brand-mark{
+      width:42px;height:42px;border-radius:50%;
+      display:grid;place-items:center;
+      background:radial-gradient(circle at 35% 35%, rgba(119,255,244,.9), rgba(52,115,255,.82));
+      box-shadow:0 0 0 3px rgba(118,176,255,.12), 0 0 28px rgba(54,216,208,.35);
+      flex:0 0 auto;
+    }
+    .brand-mark svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.7}
+    .brand-text{min-width:0;display:block}
+    .brand-title{display:block;font-size:1.58rem;line-height:1.15;font-weight:820;letter-spacing:.012em}
+    .brand-sub{display:block;margin-top:4px;color:#9db2d9;font-size:.76rem;letter-spacing:.34em;text-transform:uppercase;white-space:nowrap}
+
+    .nav-menu{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .nav-link{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 15px;border-radius:999px;
+      color:#d8e7ff;font-size:.91rem;font-weight:650;
+      transition:background .2s ease, color .2s ease, transform .2s ease;
+    }
+    .nav-link:hover{background:rgba(255,255,255,.05);color:#fff;transform:translateY(-1px)}
+    .nav-link.active{background:linear-gradient(135deg, var(--blue), #4a68ff);box-shadow:0 10px 24px rgba(59,130,255,.35)}
+    .nav-link svg,.nav-cta svg,.icon{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+    .nav-actions{display:flex;align-items:center;gap:10px}
+    .nav-cta{
+      display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border-radius:999px;
+      background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);font-weight:700;color:#f5f7ff
+    }
+    .nav-cta:hover{background:rgba(255,255,255,.11)}
+    .menu-toggle{display:none;place-items:center;width:44px;height:44px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;color:#fff}
+
+    .hero{padding:28px 0 34px;position:relative}
+    .hero-card{
+      position:relative;overflow:hidden;
+      min-height:560px;border-radius:30px;
+      border:1px solid rgba(104,161,255,.14);
+      background:
+        linear-gradient(90deg, rgba(10,28,54,.78) 0%, rgba(4,16,35,.92) 46%, rgba(6,20,42,.95) 100%),
+        linear-gradient(115deg,#081126 0%, #08142b 48%, #0d1830 100%);
+      box-shadow:var(--shadow);
+      isolation:isolate;
+    }
+    .hero-card::before{
+      content:"";position:absolute;inset:0;
+      background:
+        linear-gradient(rgba(87,146,221,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(87,146,221,.055) 1px, transparent 1px),
+        radial-gradient(circle at 76% 46%, rgba(54,216,208,.12), transparent 18%),
+        radial-gradient(circle at 34% 24%, rgba(59,130,255,.11), transparent 18%);
+      background-size: 36px 36px, 36px 36px, auto, auto;
+      pointer-events:none;
+      opacity:.95;
+    }
+    .hero-grid{position:relative;z-index:1;padding:74px 36px 50px;display:grid;grid-template-columns:1.06fr .94fr;gap:32px;min-height:560px;align-items:center}
+    .hero-copy{align-self:center;max-width:690px}
+    .hero-copy h1{font-size:clamp(3.2rem,5.7vw,5.5rem);line-height:.94;letter-spacing:-.045em;margin:0 0 24px;font-weight:840;max-width:720px}
+    .hero-copy h1 .accent{color:#74eadf}
+    .hero-copy p{font-size:clamp(1.04rem,1.4vw,1.22rem);max-width:760px;color:#d8e5fb;margin:0 0 26px 0;line-height:1.8}
+    .hero-copy .support{color:#a9bbd6;font-size:.99rem}
+    .mini-kicker{display:inline-flex;align-items:center;gap:10px;margin-bottom:18px;color:var(--teal-2);font-size:.84rem;font-weight:800;letter-spacing:.24em;text-transform:uppercase}
+    .mini-kicker .pulse{width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--blue));box-shadow:0 0 15px rgba(54,216,208,.65)}
+
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 22px;border-radius:12px;font-weight:760;font-size:.95rem;transition:transform .18s ease, background .18s ease, border-color .18s ease}
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{background:linear-gradient(135deg,#78eadf,#60d8c9);color:#06203a;box-shadow:0 16px 34px rgba(84,225,214,.18)}
+    .btn-secondary{background:transparent;border:1px solid rgba(155,197,255,.3);color:#eff6ff}
+    .btn-wa{background:linear-gradient(135deg, #12c981, #0fa66a);box-shadow:0 16px 34px rgba(18,201,129,.28)}
+    .btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+
+    .founder-note{margin-top:34px;color:#9fb0ca;font-size:.95rem}
+    .founder-note strong{color:#fff}
+
+    .hero-side{display:flex;align-items:center;justify-content:center;position:relative}
+    .hero-visual{position:relative;width:min(100%,520px);padding:6px 0 36px}
+    .hero-visual svg{display:block;width:100%;height:auto;overflow:visible}
+    .hero-visual .ring{stroke:rgba(109,197,255,.28);fill:none;stroke-width:1.35}
+    .hero-visual .spoke{stroke:rgba(109,197,255,.12);fill:none;stroke-width:1}
+    .hero-visual .guide{stroke:rgba(145,178,214,.35);fill:none;stroke-width:1.5;stroke-dasharray:5 7}
+    .hero-visual .branch{stroke:#75e8df;fill:none;stroke-width:3;stroke-linecap:round}
+    .hero-visual .future-dot{fill:#e4be73}
+    .hero-visual .present-dot{fill:#72eadf}
+    .hero-visual text{font:600 14px/1.2 Inter,system-ui,sans-serif;fill:#95abc7;letter-spacing:.14em;text-transform:uppercase}
+    .hero-note{position:absolute;right:0;bottom:0;padding:12px 18px;border-radius:14px;background:rgba(8,21,41,.7);border:1px solid rgba(118,176,255,.18);color:#c8d7ec;font-size:.94rem}
+    .hero-note strong{color:#fff;font-weight:600}
+
+    .about-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:28px}
+    .story-card,.quote-card,.contact-card,.paper-card,.lab-card,.join-card{background:linear-gradient(180deg, rgba(13,24,49,.72), rgba(10,18,38,.78));border:1px solid rgba(118,176,255,.14);border-radius:28px;box-shadow:var(--shadow)}
+    .story-card,.quote-card,.contact-card{padding:28px}
+    .story-card p,.quote-card p,.contact-card p{color:var(--muted);margin:0 0 16px}
+    .story-card p:last-child,.contact-card p:last-child{margin-bottom:0}
+    .quote-card blockquote{margin:0;color:#e5f4ff;font-size:1.22rem;line-height:1.66;letter-spacing:.01em;font-family:Georgia,serif}
+    .quote-card small{display:block;margin-top:14px;color:#94a7cb;text-transform:uppercase;letter-spacing:.14em;font-size:.78rem}
+    .contact-line{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+    .contact-chip{display:inline-flex;align-items:center;gap:9px;padding:12px 16px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-weight:700}
+    .contact-chip svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.9}
+
+    .about-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:28px}
+    .story-card,.quote-card,.contact-card,.paper-card,.lab-card,.join-card{background:linear-gradient(180deg, rgba(13,24,49,.72), rgba(10,18,38,.78));border:1px solid rgba(118,176,255,.14);border-radius:28px;box-shadow:var(--shadow)}
+    .story-card,.quote-card,.contact-card{padding:28px}
+    .story-card p,.quote-card p,.contact-card p{color:var(--muted);margin:0 0 16px}
+    .story-card p:last-child,.contact-card p:last-child{margin-bottom:0}
+    .quote-card blockquote{margin:0;color:#e5f4ff;font-size:1.22rem;line-height:1.66;letter-spacing:.01em;font-family:Georgia,serif}
+    .quote-card small{display:block;margin-top:14px;color:#94a7cb;text-transform:uppercase;letter-spacing:.14em;font-size:.78rem}
+    .contact-line{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+    .contact-chip{display:inline-flex;align-items:center;gap:9px;padding:12px 16px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-weight:700}
+    .contact-chip svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.9}
+
+    .papers-wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+    @media (min-width: 1750px){.papers-wrap{grid-template-columns:repeat(4,minmax(0,1fr))}.hero-grid{grid-template-columns:1fr 1fr}}
+    .paper-card{padding:28px;display:flex;flex-direction:column;min-height:300px;transition:transform .18s ease,border-color .18s ease}
+    .paper-card:hover{transform:translateY(-4px);border-color:rgba(54,216,208,.28)}
+    .paper-meta{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:16px}
+    .paper-chip,.status-chip{display:inline-flex;align-items:center;padding:8px 11px;border-radius:999px;font-size:.74rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+    .paper-chip{background:rgba(54,216,208,.1);color:var(--teal-2)}
+    .status-chip{background:rgba(90,169,255,.08);border:1px solid rgba(90,169,255,.14);color:#c8ddff}
+    .paper-card h3{margin:0 0 12px;font-size:1.29rem;line-height:1.35;letter-spacing:.012em}
+    .paper-card > p{margin:0 0 18px;color:var(--muted)}
+    details{margin-top:auto;border-top:1px solid var(--line);padding-top:14px}
+    summary{list-style:none;cursor:pointer;color:#d7ebff;font-weight:760}
+    summary::-webkit-details-marker{display:none}
+    summary::after{content:" +";color:var(--teal)}
+    details[open] summary::after{content:" —"}
+    details p{margin:12px 0 0;color:#b8c7e0}
+    .subtle-note{margin-top:18px;color:#94a7cb;font-size:.92rem}
+
+    .lab-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:28px;align-items:start}
+    .lab-card{padding:28px}
+    .checklist{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:14px}
+    .checklist li{position:relative;padding-left:32px;color:#c8d6ea}
+    .checklist li::before{content:"✦";position:absolute;left:0;top:0;color:var(--teal)}
+    .demo-card{padding:28px}
+    .demo-top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:10px}
+    .demo-top h3{margin:0;font-size:1.2rem;letter-spacing:.012em}
+    .demo-badge{display:inline-flex;align-items:center;padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);font-size:.76rem;font-weight:750;color:#d8ebff;text-transform:uppercase;letter-spacing:.14em}
+    .demo-card p{color:var(--muted);margin:0 0 16px}
+    .slider-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:18px 0 8px}
+    .slider-head label{font-weight:700}
+    .slider-head output{font-weight:800;color:var(--teal-2)}
+    input[type="range"]{width:100%;accent-color:var(--blue-2)}
+    .bars{display:grid;gap:14px;margin-top:18px}
+    .bar{display:grid;grid-template-columns:130px 1fr auto;gap:14px;align-items:center}
+    .bar span{font-weight:650;color:#d7e5fb}
+    .track{height:13px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;border:1px solid rgba(255,255,255,.06)}
+    .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--blue),var(--teal))}
+    .fill.stress{background:linear-gradient(90deg,#5d84ff,#9ab7ff)}
+    .fill.crisis{background:linear-gradient(90deg,#1eb6d8,#4df3ec)}
+    .result-card{margin-top:22px;padding:18px 20px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+    .result-card span{display:block;color:#9eb2d6;font-size:.86rem;letter-spacing:.18em;text-transform:uppercase}
+    .result-card strong{display:block;margin-top:8px;font-size:1.75rem;letter-spacing:.012em}
+    .tiny{margin-top:14px;color:#8fa4c6;font-size:.86rem}
+
+    .join-grid{display:grid;grid-template-columns:1.04fr .96fr;gap:28px}
+    .join-card{padding:30px}
+    .join-card h3{margin:0 0 10px;font-size:1.28rem;letter-spacing:.012em}
+    .join-card p{margin:0 0 14px;color:var(--muted)}
+    .action-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+    .steps{display:grid;gap:14px}
+    .step{padding:18px 18px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);display:flex;gap:14px;align-items:flex-start}
+    .step-num{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue),var(--teal));color:#fff;font-weight:800;flex:0 0 auto}
+    .step p{margin:0;color:#c8d6ea}
+
+    footer{padding:30px 0 60px;border-top:1px solid var(--line)}
+    .footer-card{display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap;padding:24px 26px;border-radius:24px;background:linear-gradient(180deg, rgba(13,24,49,.72), rgba(10,18,38,.78));border:1px solid rgba(118,176,255,.14)}
+    .footer-card p{margin:4px 0 0;color:#9fb2d4}
+    .footer-links{display:flex;gap:16px;flex-wrap:wrap}
+    .footer-links a{color:#d6e6ff;font-weight:650}
+
+    .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(22px);padding:12px 18px;border-radius:999px;background:rgba(5,11,29,.92);border:1px solid rgba(118,176,255,.22);color:#f2f7ff;opacity:0;pointer-events:none;transition:all .22s ease;z-index:70;box-shadow:0 16px 40px rgba(0,0,0,.35)}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    @media (max-width: 1100px){
+      .hero-grid,.about-grid,.lab-grid,.join-grid{grid-template-columns:1fr}
+      .hero-card{min-height:auto}
+      .hero-grid{min-height:auto;padding:70px 30px 40px}
+      .papers-wrap{grid-template-columns:1fr 1fr}
+      .hero-copy{max-width:none}
+      .hero-visual{margin:0 auto}
+    }
+    @media (max-width: 900px){
+      .nav-wrap{position:relative;align-items:flex-start}
+      .menu-toggle{display:grid}
+      .nav-area{display:flex;align-items:center;gap:10px;margin-left:auto}
+      .nav-menu{
+        display:none;position:absolute;left:16px;right:16px;top:76px;flex-direction:column;align-items:stretch;padding:14px;
+        background:linear-gradient(180deg, rgba(12,24,50,.96), rgba(8,18,40,.96));
+        border:1px solid rgba(111,159,255,.16);border-radius:22px;box-shadow:0 20px 50px rgba(0,0,0,.28)
+      }
+      .nav-menu.open{display:flex}
+      .nav-link,.nav-link.active,.nav-cta{justify-content:flex-start;border-radius:14px}
+      .papers-wrap{grid-template-columns:1fr}
+      .brand-title{font-size:1.45rem}
+      .brand-sub{font-size:.66rem;letter-spacing:.25em}
+      .hero-copy h1{font-size:clamp(2.8rem,10vw,4.3rem)}
+    }
+    @media (max-width: 680px){
+      .container{width:calc(100% - 28px)}
+      .site-header{width:calc(100% - 20px)}
+      .hero{padding-top:42px}
+      .hero-grid{padding:50px 20px 22px}
+      .hero-copy h1{font-size:clamp(2rem,9.5vw,2.7rem)}
+      .hero-copy p{font-size:.96rem}
+      .metric-value{font-size:1.55rem}
+      .glass-card,.story-card,.quote-card,.contact-card,.paper-card,.lab-card,.join-card,.footer-card{border-radius:22px}
+      .btn{width:100%}
+      .bar{grid-template-columns:1fr;gap:8px}
+      .footer-card{align-items:flex-start}
+    }
+
+    /* Overview material preserved from index-3; visual system retained from index-4 */
+    .research-overview{padding-top:42px;padding-bottom:80px}
+    .overview-intro{display:grid;grid-template-columns:1fr 1fr;gap:38px;align-items:start;margin-bottom:30px}
+    .overview-intro h2{font-size:clamp(1.8rem,3vw,2.75rem);line-height:1.24;letter-spacing:.007em;margin:12px 0 0;font-weight:780}
+    .overview-intro h2 em{font-style:normal;color:var(--teal-2)}
+    .overview-copy p{margin:0 0 15px;font-size:1rem;line-height:1.82;color:#c4d4e8}
+    .overview-copy p:last-child{margin:0}
+    .overview-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0 0 18px}
+    .overview-metric{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:14px;padding:22px 24px;background:linear-gradient(135deg,rgba(31,48,80,.72),rgba(10,28,49,.78));border:1px solid rgba(99,184,227,.18);border-radius:18px;min-width:0}
+    .overview-metric strong{font-size:1.65rem;letter-spacing:.015em;font-weight:790;color:#86ecdd;line-height:1.13;white-space:nowrap}
+    .overview-metric .metric-detail{min-width:0}
+    .overview-metric .metric-detail span{font-size:.72rem;color:#a6c0dc;letter-spacing:.18em;text-transform:uppercase;display:block;font-weight:790}
+    .overview-metric .metric-detail p{font-size:.82rem;line-height:1.48;color:#a8bad1;margin:4px 0 0}
+    .overview-features{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+    .overview-feature{min-width:0;padding:24px 22px 22px;background:rgba(12,27,49,.66);border:1px solid rgba(118,176,255,.14);border-radius:18px;position:relative}
+    .overview-feature::before{content:'';height:3px;position:absolute;left:22px;right:22px;top:0;background:linear-gradient(90deg,rgba(54,216,208,.85),rgba(59,130,255,.08));border-radius:0 0 5px 5px}
+    .overview-feature .category{font-weight:780;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:#77e5dd}
+    .overview-feature h3{font-size:1.1rem;line-height:1.34;letter-spacing:.02em;margin:12px 0 9px}
+    .overview-feature p{font-size:.87rem;color:#b7c8db;line-height:1.71;margin:0}
+    @media(max-width:1080px){
+      .overview-intro{grid-template-columns:1fr;gap:15px}
+      .overview-features{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .overview-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .overview-metric{grid-template-columns:1fr;gap:7px;padding:18px}
+    }
+    @media(max-width:700px){
+      .research-overview{padding-top:24px;padding-bottom:60px}
+      .overview-metrics,.overview-features{grid-template-columns:1fr}
+      .overview-metric{grid-template-columns:100px 1fr;align-items:center;gap:10px}
+      .overview-intro h2{font-size:1.84rem}
+      .overview-feature{padding:21px}
+      .site-header{width:100%}
+      .hero-note{position:static;margin-top:8px}
+    }
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header" id="top">
+      <div class="nav-wrap">
+        <a class="brand" href="#top" aria-label="Actuarial Engineering — Parallel Futures Initiative home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5"></circle><path d="M12 2.75v3.2M12 18.05v3.2M2.75 12h3.2M18.05 12h3.2M5.45 5.45l2.26 2.26M16.29 16.29l2.26 2.26M18.55 5.45l-2.26 2.26M7.71 16.29l-2.26 2.26"></path></svg>
+          </span>
+          <span class="brand-text">
+            <span class="brand-title">Actuarial Engineering</span>
+            <span class="brand-sub">Parallel Futures Initiative</span>
+          </span>
+        </a>
+
+        <div class="nav-area">
+          <nav class="nav-menu" id="nav-menu" aria-label="Primary">
+            <a class="nav-link active" href="#top">
+              <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5.5 9.5V20h13V9.5"></path></svg>
+              <span>Home</span>
+            </a>
+            <a class="nav-link" href="#papers">
+              <svg viewBox="0 0 24 24"><path d="M5 5.5h14M5 10.5h14M5 15.5h8"></path><path d="M5 3.5h14a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-15a1 1 0 0 1 1-1Z"></path></svg>
+              <span>Papers</span>
+            </a>
+            <a class="nav-link" href="#lab">
+              <svg viewBox="0 0 24 24"><path d="M10 3v5l-5 9a2 2 0 0 0 1.75 3h10.5A2 2 0 0 0 19 17l-5-9V3"></path><path d="M8 8h8"></path></svg>
+              <span>Lab</span>
+            </a>
+            <a class="nav-link" href="#collaborate">
+              <svg viewBox="0 0 24 24"><path d="M16 6a3 3 0 1 0-2.83-4"></path><path d="M8 18a3 3 0 1 0 2.83 4"></path><path d="M8.8 16.5l6.4-9"></path></svg>
+              <span>Collaborate</span>
+            </a>
+            <a class="nav-cta" href="https://wa.me/19542288279" target="_blank" rel="noopener" title="+1 954 2288279">
+              <svg viewBox="0 0 24 24"><path d="M20 12.05A8 8 0 0 1 8.31 19.1L4 20l.95-4.15A8 8 0 1 1 20 12.05Z"></path><path d="M9.25 8.9c.28-.62.58-.63.85-.64h.73c.23 0 .46.05.6.35.18.39.61 1.5.66 1.61.05.11.09.24.02.39-.07.16-.11.26-.22.39-.11.13-.23.28-.33.38-.11.11-.22.24-.09.46.13.22.57.94 1.22 1.52.84.74 1.55.97 1.77 1.08.22.11.35.09.48-.06.13-.16.57-.66.72-.89.15-.22.31-.19.53-.11.22.07 1.37.64 1.61.75.24.11.39.17.45.26.05.09.05.53-.12 1.05-.17.52-1.01 1-1.41 1.06-.36.06-.82.09-2.64-.63-2.2-.88-3.61-3.05-3.72-3.19-.11-.14-.89-1.18-.89-2.26 0-1.08.56-1.61.76-1.83Z"></path></svg>
+              <span>WhatsApp</span>
+            </a>
+          </nav>
+          <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="nav-menu" aria-expanded="false" aria-label="Open navigation menu">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="hero-grid">
+            <div class="hero-copy">
+              <span class="mini-kicker"><span class="pulse"></span> Open research initiative · Founded 2026</span>
+              <h1>The future is not <span class="accent">a single forecast.</span></h1>
+              <p>An interdisciplinary research initiative at the intersection of actuarial mathematics, artificial intelligence, stochastic risk and the mathematics of time.</p>
+
+              <div class="hero-actions">
+                <a class="btn btn-primary" href="#papers">
+                  <span>Explore working papers</span>
+                  <svg viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
+                </a>
+                <a class="btn btn-secondary" href="#collaborate">
+                  <span>Join the research conversation</span>
+                </a>
+              </div>
+
+              <p class="founder-note">Actuarial Engineering · Initiated by <strong>Harsh Vikram Arora</strong> · For further information, <a href="https://wa.me/19542288279" target="_blank" rel="noopener" title="+1 954 2288279">WhatsApp me on +1 954 ACTUARY</a>.</p>
+            </div>
+
+            <div class="hero-side" aria-hidden="true">
+              <div class="hero-visual">
+                <svg viewBox="0 0 560 430" role="img" aria-label="Branching futures diagram">
+                  <circle class="ring" cx="324" cy="215" r="155"></circle>
+                  <circle class="ring" cx="324" cy="215" r="103"></circle>
+                  <circle class="ring" cx="324" cy="215" r="55"></circle>
+                  <line class="spoke" x1="324" y1="60" x2="324" y2="370"></line>
+                  <line class="spoke" x1="169" y1="215" x2="479" y2="215"></line>
+                  <path class="guide" d="M292 215 C372 180, 430 158, 535 168"></path>
+                  <path class="guide" d="M292 215 C372 230, 430 235, 535 227"></path>
+                  <path class="guide" d="M292 215 C360 272, 424 303, 518 355"></path>
+
+                  <line class="branch" x1="120" y1="215" x2="292" y2="215"></line>
+                  <path class="branch" d="M292 215 C350 205, 392 130, 500 88"></path>
+                  <path class="branch" d="M292 215 C360 205, 412 170, 504 167"></path>
+                  <path class="branch" d="M292 215 C372 215, 432 215, 522 215"></path>
+                  <path class="branch" d="M292 215 C360 224, 412 268, 504 298"></path>
+                  <path class="branch" d="M292 215 C350 238, 396 320, 501 378"></path>
+
+                  <circle class="future-dot" cx="105" cy="215" r="10"></circle>
+                  <circle class="present-dot" cx="254" cy="215" r="9"></circle>
+                  <circle class="future-dot" cx="500" cy="88" r="7"></circle>
+                  <circle class="future-dot" cx="504" cy="167" r="7"></circle>
+                  <circle class="future-dot" cx="522" cy="215" r="7"></circle>
+                  <circle class="future-dot" cx="504" cy="298" r="7"></circle>
+                  <circle class="future-dot" cx="501" cy="378" r="7"></circle>
+
+                  <text x="76" y="250">Present</text>
+                  <text x="388" y="56">Possible futures</text>
+                  <text x="364" y="426">Stochastic paths</text>
+                </svg>
+                <div class="hero-note"><strong>One starting point.</strong> Many possible outcomes.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section research-overview" id="research-overview" aria-labelledby="overview-title">
+      <div class="container">
+        <div class="overview-intro">
+          <div>
+            <span class="eyebrow">Research overview</span>
+            <h2 id="overview-title">Explore uncertain futures through actuarial science, AI and the mathematics of time.</h2>
+          </div>
+          <div class="overview-copy">
+<p>Actuarial Engineering — Parallel Futures is a research initiative designed to go beyond a single forecast and build rigorous models across many possible futures.</p>
+<p>The initiative combines stochastic risk, actuarial decision-making, computational modelling and exploratory questions inspired by modern physics—while keeping the scientific boundaries explicit.</p>
+          </div>
+        </div>
+        <div class="overview-metrics" aria-label="Initiative at a glance">
+          <div class="overview-metric">
+            <strong>4</strong>
+            <div class="metric-detail"><span>Working papers</span><p>foundation papers proposed for the initiative</p></div>
+          </div>
+          <div class="overview-metric">
+            <strong>AI + Risk</strong>
+            <div class="metric-detail"><span>Core themes</span><p>stochastic modelling, decisions and time</p></div>
+          </div>
+          <div class="overview-metric">
+            <strong>Open</strong>
+            <div class="metric-detail"><span>Approach</span><p>transparent collaboration and reproducible ideas</p></div>
+          </div>
+        </div>
+        <div class="overview-features">
+          <article class="overview-feature">
+            <span class="category">Research focus</span>
+            <h3>Parallel futures</h3>
+            <p>Evaluate uncertainty by comparing many future paths rather than relying on a single deterministic view of tomorrow.</p>
+          </article>
+          <article class="overview-feature">
+            <span class="category">Method</span>
+            <h3>Actuarial engineering</h3>
+            <p>Translate actuarial mathematics into computational systems, experiments and decision-support tools.</p>
+          </article>
+          <article class="overview-feature">
+            <span class="category">Boundary</span>
+            <h3>Speculation with discipline</h3>
+            <p>Use bold questions, but separate established actuarial methods from exploratory theory.</p>
+          </article>
+          <article class="overview-feature">
+            <span class="category">Collaboration</span>
+            <h3>Invite global contributors</h3>
+            <p>Actuaries, mathematicians, AI researchers, physicists and quantitative thinkers can contribute to individual papers.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">The initiative</span>
+          <h2>A research programme, not just a single article.</h2>
+          <p>This repository is intended to be the main home of the initiative. Individual papers, models, experiments and discussions will sit under one recognisable research identity.</p>
+        </div>
+        <div class="about-grid">
+          <div class="story-card">
+            <p><strong>Actuarial Engineering — Parallel Futures</strong> is built around a simple idea: actuarial science already studies uncertain futures, and modern computation now allows us to explore those futures more deeply, more transparently and more interactively.</p>
+            <p>The initial focus is practical and credible: AI-augmented stochastic risk models, counterfactual decision frameworks and computational actuarial applications. More exploratory questions about time and relativity can sit alongside these as clearly identified research streams.</p>
+            <p>The repository <code>actuarial-engineering-parallel-futures</code> will therefore function as the umbrella structure for the initiative, rather than creating unrelated standalone pages for each paper.</p>
+          </div>
+          <div>
+            <div class="quote-card">
+              <blockquote>Physics studies what futures are possible. Actuarial science measures the consequences of uncertain futures. Actuarial Engineering builds systems that help us make decisions before those futures arrive.</blockquote>
+              <small>Conceptual foundation of the initiative</small>
+            </div>
+            <div class="contact-card" style="margin-top:18px;">
+              <p><strong>Lead contact</strong></p>
+              <p>Harsh Vikram Arora</p>
+              <div class="contact-line">
+                <a class="contact-chip" href="https://wa.me/19542288279" target="_blank" rel="noopener" title="+1 954 2288279">
+                  <svg viewBox="0 0 24 24"><path d="M20 12.05A8 8 0 0 1 8.31 19.1L4 20l.95-4.15A8 8 0 1 1 20 12.05Z"></path><path d="M9.25 8.9c.28-.62.58-.63.85-.64h.73c.23 0 .46.05.6.35.18.39.61 1.5.66 1.61.05.11.09.24.02.39-.07.16-.11.26-.22.39-.11.13-.23.28-.33.38-.11.11-.22.24-.09.46.13.22.57.94 1.22 1.52.84.74 1.55.97 1.77 1.08.22.11.35.09.48-.06.13-.16.57-.66.72-.89.15-.22.31-.19.53-.11.22.07 1.37.64 1.61.75.24.11.39.17.45.26.05.09.05.53-.12 1.05-.17.52-1.01 1-1.41 1.06-.36.06-.82.09-2.64-.63-2.2-.88-3.61-3.05-3.72-3.19-.11-.14-.89-1.18-.89-2.26 0-1.08.56-1.61.76-1.83Z"></path></svg>
+                  <span>WhatsApp me · +1 954 ACTUARY</span>
+                </a>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="papers">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Working papers</span>
+          <h2>Initial papers under the Parallel Futures umbrella.</h2>
+          <p>Each paper belongs to the same initiative, but may have its own distinct author group, contribution trail and publication pathway.</p>
+        </div>
+
+        <div class="papers-wrap">
+          <article class="paper-card">
+            <div class="paper-meta"><span class="paper-chip">Foundational paper</span><span class="status-chip">Primary launch paper</span></div>
+            <h3>Beyond a Single Future: An AI-Augmented Actuarial Engineering Framework for Stochastic Risk and Decision-Making</h3>
+            <p>The anchor paper for the initiative, setting out the conceptual framework, scope, research questions and boundaries for the broader programme.</p>
+            <details>
+              <summary>View outline</summary>
+              <p>Define the meaning of “parallel futures” in an actuarial context, position AI as an evaluative and computational tool, and compare enhanced methods against conventional actuarial modelling baselines.</p>
+            </details>
+          </article>
+
+          <article class="paper-card">
+            <div class="paper-meta"><span class="paper-chip">Temporal valuation</span><span class="status-chip">Exploratory</span></div>
+            <h3>Relativistic Life Insurance and Temporal Valuation</h3>
+            <p>A theoretical study of mortality, valuation and contract design when biological time and financial time may not align in the same way.</p>
+            <details>
+              <summary>View outline</summary>
+              <p>Use proper-time mortality ideas and Earth-time discounting as a mathematically disciplined thought experiment, while separating proven relativity from speculative engineering application.</p>
+            </details>
+          </article>
+
+          <article class="paper-card">
+            <div class="paper-meta"><span class="paper-chip">Computational engine</span><span class="status-chip">Applied modelling</span></div>
+            <h3>AI-Enabled Parallel Futures Simulation Engine</h3>
+            <p>An auditable computational environment for scenario generation, valuation APIs and comparison of alternative risk decisions across many simulated futures.</p>
+            <details>
+              <summary>View outline</summary>
+              <p>Develop the architecture for scenarios, experiments, result logging, visual outputs and reproducible actuarial computation—using AI only where it adds measurable value.</p>
+            </details>
+          </article>
+
+          <article class="paper-card">
+            <div class="paper-meta"><span class="paper-chip">Decision science</span><span class="status-chip">Counterfactuals</span></div>
+            <h3>Counterfactual Underwriting and Risk Decisions</h3>
+            <p>What would have happened under different underwriting, pricing, reinsurance or reserving decisions—and how should actuaries evaluate those alternatives?</p>
+            <details>
+              <summary>View outline</summary>
+              <p>Investigate causal assumptions, look-ahead bias, intervention logic and practical methods for evaluating alternative historical or strategic choices within risk systems.</p>
+            </details>
+          </article>
+        </div>
+
+        <p class="subtle-note">Paper names are working titles. Participation in the initiative does not automatically create authorship on every paper.</p>
+      </div>
+    </section>
+
+    <section class="section" id="lab">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">AI & computational lab</span>
+          <h2>Ideas must become models.</h2>
+          <p>The initiative is intended to produce working demonstrations, not only conceptual writing. Each important idea should eventually connect to a model, experiment or application.</p>
+        </div>
+
+        <div class="lab-grid">
+          <div class="lab-card">
+            <h3>Research approach</h3>
+            <ul class="checklist">
+              <li>Start with a clear research question and explicit boundary conditions.</li>
+              <li>Build a conventional actuarial or statistical baseline before adding AI.</li>
+              <li>Test whether AI improves calibration, speed, insight or usability.</li>
+              <li>Keep methods auditable, reproducible and open to critique.</li>
+              <li>Translate the strongest ideas into APIs, applications or simulations.</li>
+            </ul>
+          </div>
+
+          <div class="lab-card demo-card" aria-label="Illustrative scenario explorer">
+            <div class="demo-top">
+              <h3>Scenario explorer</h3>
+              <span class="demo-badge">Illustrative demo</span>
+            </div>
+            <p>Move the slider to change severe-crisis probability. Expected claims update instantly in US dollars. This is a simple teaching illustration for the initiative.</p>
+
+            <div class="slider-head">
+              <label for="crisis">Severe-crisis probability</label>
+              <output id="crisisValue" for="crisis">10%</output>
+            </div>
+            <input id="crisis" type="range" min="0" max="20" step="1" value="10">
+
+            <div class="bars">
+              <div class="bar">
+                <span>Stable · US$1.0M</span>
+                <div class="track"><div class="fill" id="stableBar" style="width:60%"></div></div>
+                <output id="stableShare">60%</output>
+              </div>
+              <div class="bar">
+                <span>Stress · US$2.5M</span>
+                <div class="track"><div class="fill stress" style="width:30%"></div></div>
+                <output>30%</output>
+              </div>
+              <div class="bar">
+                <span>Crisis · US$7.0M</span>
+                <div class="track"><div class="fill crisis" id="crisisBar" style="width:10%"></div></div>
+                <output id="crisisShare">10%</output>
+              </div>
+            </div>
+
+            <div class="result-card">
+              <span>Scenario-weighted expected claims</span>
+              <strong id="expectedValue">US$2.05M</strong>
+            </div>
+            <p class="tiny">Formula: E[L] = Σ pᵢLᵢ. Values shown are illustrative only and do not represent a calibrated actuarial model or forecast.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="collaborate">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Collaborate</span>
+          <h2>Invite collaborators without losing structure.</h2>
+          <p>Open participation works best when scope, contribution records and authorship expectations are transparent from the beginning.</p>
+        </div>
+
+        <div class="join-grid">
+          <div class="join-card">
+            <h3>Who this initiative is for</h3>
+            <p>Actuaries, quantitative finance professionals, statisticians, mathematicians, physicists, software developers and AI researchers with a serious interest in uncertainty, modelling and decision systems.</p>
+            <p>The initiative can host multiple papers at once, as long as contribution boundaries and responsibilities are clearly documented.</p>
+            <div class="action-row">
+              <button class="btn btn-primary" type="button" id="copyInvite">
+                <svg viewBox="0 0 24 24"><path d="M8 5h11v14H8z"></path><path d="M5 9H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-1"></path></svg>
+                <span>Copy Invitation Text</span>
+              </button>
+              <a class="btn btn-secondary" href="https://wa.me/19542288279" target="_blank" rel="noopener" title="+1 954 2288279">
+                <svg viewBox="0 0 24 24"><path d="M20 12.05A8 8 0 0 1 8.31 19.1L4 20l.95-4.15A8 8 0 1 1 20 12.05Z"></path><path d="M9.25 8.9c.28-.62.58-.63.85-.64h.73c.23 0 .46.05.6.35.18.39.61 1.5.66 1.61.05.11.09.24.02.39-.07.16-.11.26-.22.39-.11.13-.23.28-.33.38-.11.11-.22.24-.09.46.13.22.57.94 1.22 1.52.84.74 1.55.97 1.77 1.08.22.11.35.09.48-.06.13-.16.57-.66.72-.89.15-.22.31-.19.53-.11.22.07 1.37.64 1.61.75.24.11.39.17.45.26.05.09.05.53-.12 1.05-.17.52-1.01 1-1.41 1.06-.36.06-.82.09-2.64-.63-2.2-.88-3.61-3.05-3.72-3.19-.11-.14-.89-1.18-.89-2.26 0-1.08.56-1.61.76-1.83Z"></path></svg>
+                <span>WhatsApp for information</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="join-card">
+            <div class="steps">
+              <div class="step"><div class="step-num">1</div><p>Review the initiative and identify the paper or model that best matches your expertise.</p></div>
+              <div class="step"><div class="step-num">2</div><p>Share your proposed contribution, critique or research angle before work begins.</p></div>
+              <div class="step"><div class="step-num">3</div><p>Agree on scope, roles, authorship expectations and contribution recording for that specific paper.</p></div>
+              <div class="step"><div class="step-num">4</div><p>Use GitHub Pages, Discussions, manuscript drafts and model reviews to collaborate openly.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-card">
+        <div>
+          <strong>Actuarial Engineering — Parallel Futures Initiative</strong>
+          <p>Founder & Research Initiator: Harsh Vikram Arora · Repository name: <code>actuarial-engineering-parallel-futures</code></p>
+        </div>
+        <div class="footer-links">
+          <a href="#top">Home</a>
+          <a href="#papers">Papers</a>
+          <a href="#lab">Lab</a>
+          <a href="https://wa.me/19542288279" target="_blank" rel="noopener" title="+1 954 2288279">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      'use strict';
+      const menuToggle = document.getElementById('menu-toggle');
+      const navMenu = document.getElementById('nav-menu');
+      menuToggle?.addEventListener('click', () => {
+        const open = navMenu.classList.toggle('open');
+        menuToggle.setAttribute('aria-expanded', String(open));
+        menuToggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+      });
+      const navLinks = [...navMenu.querySelectorAll('a.nav-link')];
+      function setActiveNav(hash){
+        navLinks.forEach(link => {
+          const active = link.getAttribute('href') === hash;
+          link.classList.toggle('active',active);
+          if(active) link.setAttribute('aria-current','location');
+          else link.removeAttribute('aria-current');
+        });
+      }
+      navLinks.forEach(link => link.addEventListener('click',() => setActiveNav(link.getAttribute('href'))));
+      const observed = [document.getElementById('top'),...navLinks.map(link=>document.querySelector(link.getAttribute('href')))].filter(Boolean);
+      if('IntersectionObserver' in window){
+        const observer = new IntersectionObserver(entries => {
+          const visible = entries.filter(entry=>entry.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
+          if(visible) setActiveNav('#'+visible.target.id);
+        },{rootMargin:'-100px 0px -58% 0px',threshold:[0,.1,.5]});
+        [...new Set(observed)].forEach(el=>observer.observe(el));
+      }
+      navMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+        if (window.innerWidth <= 900) {
+          navMenu.classList.remove('open');
+          menuToggle.setAttribute('aria-expanded', 'false');
+          menuToggle.setAttribute('aria-label', 'Open navigation menu');
+        }
+      }));
+
+      const slider = document.getElementById('crisis');
+      function updateScenario(){
+        const crisis = Number(slider.value);
+        const stress = 30;
+        const stable = 70 - crisis;
+        const expected = (stable * 1.0 + stress * 2.5 + crisis * 7.0) / 100;
+        document.getElementById('crisisValue').textContent = crisis + '%';
+        document.getElementById('stableShare').textContent = stable + '%';
+        document.getElementById('crisisShare').textContent = crisis + '%';
+        document.getElementById('stableBar').style.width = stable + '%';
+        document.getElementById('crisisBar').style.width = crisis + '%';
+        document.getElementById('expectedValue').textContent = 'US$' + expected.toFixed(2) + 'M';
+      }
+      slider?.addEventListener('input', updateScenario);
+      updateScenario();
+
+      const inviteText = `I am interested in the Actuarial Engineering — Parallel Futures Initiative. I would like to discuss the working papers, the computational modelling direction, or a possible collaboration.\n\nMy background:\nMy research interest:\nHow I may contribute:`;
+      const toast = document.getElementById('toast');
+      let toastTimer;
+      function showToast(message){
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+      }
+      document.getElementById('copyInvite')?.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(inviteText);
+          showToast('Invitation text copied.');
+        } catch (err) {
+          const area = document.createElement('textarea');
+          area.value = inviteText;
+          area.style.position = 'fixed';
+          area.style.opacity = '0';
+          document.body.appendChild(area);
+          area.select();
+          const ok = document.execCommand('copy');
+          area.remove();
+          showToast(ok ? 'Invitation text copied.' : 'Copy failed. Please check browser permissions.');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
